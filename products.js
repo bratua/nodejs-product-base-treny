@@ -1,6 +1,8 @@
 const fs = require("fs/promises");
-const { nanoid } = require("nanoid");
 const path = require("path");
+
+const { customAlphabet } = require("nanoid");
+const nanoid = customAlphabet("1234567890", 9);
 
 const productsPath = path.join(__dirname, "db", "productsDB.json");
 // console.log(productsPath);
@@ -34,11 +36,35 @@ const getAllProductsByName = async () => {
    return productNames;
 };
 
-const getByProductID = async (id) => {
+const getProductByID = async (id) => {
    const data = await getAllProductsByName();
    const product = data.find(({ ProductID }) => id === ProductID);
 
    return product || null;
+};
+
+const deleteProduct = async (id) => {
+   const products = await getAllProducts();
+   const index = products.findIndex(({ ProductID }) => ProductID === id);
+   if (index === -1) return null;
+   const [deletedProduct] = products.splice(index, 1);
+
+   fs.writeFile(productsPath, JSON.stringify(products, null, 2));
+
+   return deletedProduct;
+};
+
+const updateProduct = async (id, newData) => {
+   const products = await getAllProducts();
+   const index = products.findIndex(({ ProductID }) => ProductID === id);
+   if (index === -1) return null;
+
+   const updatedItem = { ...products[index], ...newData, ProductID: id };
+   products.splice(index, 1, updatedItem);
+
+   fs.writeFile(productsPath, JSON.stringify(products, null, 2));
+
+   return updatedItem;
 };
 
 const addProduct = async (newProduct) => {
@@ -47,7 +73,7 @@ const addProduct = async (newProduct) => {
 
    const newItem = {
       ...skeleton,
-      ProductID: nanoid(),
+      ProductID: Number(nanoid()),
       ...newProduct,
    };
 
@@ -58,8 +84,10 @@ const addProduct = async (newProduct) => {
 };
 
 module.exports = {
-   getByProductID,
+   getProductByID,
    getAllProductsByName,
    getAllProducts,
    addProduct,
+   deleteProduct,
+   updateProduct,
 };
