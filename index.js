@@ -11,7 +11,7 @@ const products = require("./products.js");
  * @param {String} - id param1
  * @returns {Promise<Array, Object>}
  */
-const invokeAction = async ({ action, id, productData }) => {
+const invokeAction = async ({ action, id, ...productData }) => {
    // const allProducts = Object.values(await products.getAllProductsByName());
    console.log(action);
 
@@ -46,11 +46,11 @@ const invokeAction = async ({ action, id, productData }) => {
    }
 };
 
-console.log(argv);
+// console.log(argv);
 
 //return Promise
 
-// invokeAction(argv);
+invokeAction(argv).then(console.log);
 
 // invokeAction({ action: "read" }).then(console.log);
 
@@ -60,7 +60,7 @@ console.log(argv);
 
 // invokeAction({
 //    action: "add",
-//    newProductData: { Name: "Name of new product", PriceUSD: 12312312312 },
+//    productData: { Name: "Name of new product", PriceUSD: 12312312312 },
 // }).then(console.log);
 
 // invokeAction({ action: "delete", id: 15 }).then(console.log);
