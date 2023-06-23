@@ -1,15 +1,16 @@
 const argv = require("yargs").argv;
 const { hideBin } = require("yargs");
 
+// const { program } = require("commander");
+
 const products = require("./products.js");
 // console.log("index.js: ", products);
 
 /**
  *
  *
- * @param {String} - action param0
- * @param {String} - id param1
- * @returns {Promise<Array, Object>}
+ * @param {String} - action, id, productData
+ * @returns {Promise<Object>}
  */
 const invokeAction = async ({ action, id, ...productData }) => {
    // const allProducts = Object.values(await products.getAllProductsByName());
